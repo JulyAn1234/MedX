@@ -15,13 +15,32 @@ const signInHandler = NextAuth({
                 const user = {
                     id: "1",
                     fullname:"J Smith",
-                    email: "john@gmail.com"
+                    email: "john@gmail.com",
+                    permisos:
+                    {
+                        navAppointments: true,
+                        navHistorials: true,
+                        adminAppointments: true,
+                        adminHistorials: true,
+                        adminUsers: true
+                    }
                 };
     
                 return user;
             }
         })
     ],
+    callbacks: {
+        jwt({account, token, user, profile, session}){
+            if(user)
+                token.user = user;
+            return token;
+        },
+        session ({session, token}) {
+            session.user = token.user as any;
+            return session 
+        }
+    }
 });
 
 export {signInHandler as GET, signInHandler as POST};
