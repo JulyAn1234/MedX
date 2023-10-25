@@ -1,35 +1,17 @@
 "use client"
-import {useSession} from "next-auth/react"
+import {useSession} from "next-auth/react";
+import Navbar from '../components/navbarAdmin';
 
 function AdminPage(){
   const {data: session, status} = useSession();
-
+  const permises = ['a', 'b']; 
   console.log(session, status);
-  return <div>admin</div>
+  return <main>
+    <Navbar permissions={permises} />
+    <h1>adminContent</h1>
+    <h2>adminFooter</h2>
+  </main>
 }
 
 export default AdminPage;
 
-// import { getSession } from 'next-auth/react';
-// import { GetServerSideProps } from 'next';
-
-// type AdminPageProps = {
-//   session: any; // Replace 'any' with the actual type of your session object
-// };
-
-// const AdminPage: React.FC<AdminPageProps> = ({ session }) => {
-//   console.log(session);
-//   return <div>Admin</div>;
-// };
-
-// export const getServerSideProps: GetServerSideProps<AdminPageProps> = async (context) => {
-//   const session = await getSession(context);
-
-//   return {
-//     props: {
-//       session,
-//     },
-//   };
-// };
-
-// export default AdminPage;
