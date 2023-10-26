@@ -12,7 +12,7 @@ const signInHandler = NextAuth({
             },
             authorize(credentials, req){
                 //Session info I can get from Anywhere in the site
-                const user:any = {
+                const user= {
                     id: "1",
                     fullname:"J Smith",
                     email: "john@gmail.com",
@@ -21,7 +21,7 @@ const signInHandler = NextAuth({
                         "navHistorials",
                         "adminAppointments",
                         "adminHistorials",
-                        "adminUsers"
+                        // "adminUsers"
                     ]
                 };
     

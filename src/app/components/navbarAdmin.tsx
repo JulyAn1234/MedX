@@ -4,7 +4,7 @@ import NavbarLink from './navbarLink';
 type Permission = string; // You can define a more specific type for permissions
 
 type NavbarProps = {
-  permissions: Permission[];
+  permissions?: Permission[];
 };
 
 const Navbar: React.FC<NavbarProps> = ({ permissions }) => {
