@@ -1,4 +1,3 @@
- //           @ts-nocheck
 import React from 'react';
 import NavbarLink from './navbarLink';
 type Permission = string; // You can define a more specific type for permissions

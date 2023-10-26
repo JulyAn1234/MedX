@@ -1,11 +1,9 @@
 "use client"
 import {useSession} from "next-auth/react";
-import Navbar from '../components/navbarAdmin';
+import Navbar from '../../components/navbarAdmin';
 
-function AdminPage(){
+function NavHistorialesPage(){
   const {data: session, status} = useSession();
-  // const us: object= session?.user?; 
-  console.log(session?.user?.email);
   const array:any = [
     "navAppointments",
     "navHistorials",
@@ -15,8 +13,9 @@ function AdminPage(){
   ];
   return <main>
     <Navbar permissions={array} />
-    <h1>adminContent</h1>
+    <h1>NavHistorialesPage</h1>
   </main>
 }
 
-export default AdminPage;
+export default NavHistorialesPage;
+

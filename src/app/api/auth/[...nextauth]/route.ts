@@ -12,18 +12,17 @@ const signInHandler = NextAuth({
             },
             authorize(credentials, req){
                 //Session info I can get from Anywhere in the site
-                const user = {
+                const user:any = {
                     id: "1",
                     fullname:"J Smith",
                     email: "john@gmail.com",
-                    permisos:
-                    {
-                        navAppointments: true,
-                        navHistorials: true,
-                        adminAppointments: true,
-                        adminHistorials: true,
-                        adminUsers: true
-                    }
+                    permissions: [
+                        "navAppointments",
+                        "navHistorials",
+                        "adminAppointments",
+                        "adminHistorials",
+                        "adminUsers"
+                    ]
                 };
     
                 return user;
@@ -38,7 +37,7 @@ const signInHandler = NextAuth({
         },
         session ({session, token}) {
             session.user = token.user as any;
-            return session 
+            return session; 
         }
     }
 });
