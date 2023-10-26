@@ -10,7 +10,7 @@ function AdminHistorialesPage(){
     //Admin home Page
     (<main>
       <Navbar permissions={session?.user?.permissions||[]} />
-      <h1>adminContent</h1>
+      <h1>admin historiales</h1>
     </main>) 
     : status ==="loading" ? 
     //Loading page
