@@ -6,7 +6,7 @@ import LoadingPage from "../../components/loadingPage";
 function AdminHistorialesPage(){
   const {data: session, status} = useSession();
   // const us: object= session?.user?; 
-  return status === "authenticated"?
+  return (status === "authenticated" && session?.user?.permissions?.includes("adminHistorials"))?
     //Admin home Page
     (<main>
       <Navbar permissions={session?.user?.permissions||[]} />
