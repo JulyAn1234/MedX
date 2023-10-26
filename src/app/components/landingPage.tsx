@@ -1,6 +1,6 @@
 import React from 'react';
 
-const landingPage: React.FC = ({}) => {
+const landingPage: React.FC= ({}) => {
 
   return ( 
     <div>
