@@ -1,5 +1,6 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials"
+import { loginHandler } from "@/app/handlers/user";
 
 const signInHandler = NextAuth({
     providers:[
@@ -8,21 +9,24 @@ const signInHandler = NextAuth({
             name: "credentials",
             //What credentials am I asking for in the Login?
             credentials: {
-                email: {label: "Email", type: "email", placeholder: "jsmith"}
+                email: {label: "Email", type: "email", placeholder: "example@gmail.com"},
+                username: {label: "Username", type: "username", placeholder: "user_123"},
+                password: {label: "Password", type: "password", placeholder: "******"},
             },
-            authorize(credentials, req){
+            async authorize(credentials, req){
                 //Session info I can get from Anywhere in the site
+                const email = credentials?.email as string;
+                const username = credentials?.username as string;
+                const password = credentials?.password as string;
+
+                const loginBody = {email, username, password};
+                const {data, error} = await loginHandler(loginBody);
+                if(error) throw error.response.data.message;
+                console.log(data);
                 const user= {
-                    id: "1",
-                    fullname:"J Smith",
-                    email: "john@gmail.com",
-                    permissions: [
-                        "navAppointments",
-                        "navHistorials",
-                        "adminAppointments",
-                        "adminHistorials",
-                        // "adminUsers"
-                    ]
+                    id: data.session.clinicId,
+                    username: data.session.username,
+                    permissions: data.session.permissions
                 };
     
                 return user;
