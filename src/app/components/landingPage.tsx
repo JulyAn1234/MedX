@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Quiropractico from './images/Quiropractico.jpg';
 import './styles/styles.css'; // Import your stylesheet
+import Logo from './images/logo.png';
+
 const landingPage: React.FC= ({}) => {
   const loginPath = "/api/auth/signin";
   return ( 
@@ -69,7 +71,7 @@ const landingPage: React.FC= ({}) => {
       <footer className="bg-very-dark-blue py-6">
         <section className="wrapper grid gap-12 justify-items-center footer-area md:footer-area-md md:grid-cols-3 md:justify-items-stretch">
             <a href="#" className="[grid-area:logo]">
-                <img src="../images/logo.png" className=""></img>
+                <Image src={Logo} alt= "Quiropractico" className="w-32"/>
             </a>
             <p className="text-dark-grayish-blue text-center [grid-area:copy] md:text-right">Copyright MedX 2023. Todos los derechos reservados</p>
         </section>

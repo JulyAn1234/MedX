@@ -1,7 +1,10 @@
  //           @ts-nocheck
 import NavbarLink from './navbarLink';
 import { signOut } from "next-auth/react"
+import Link from 'next/link';
+import Image from 'next/image';
 import React, { useState } from 'react';
+import Logo from './images/logo.png';
 
 type Permission = string; // You can define a more specific type for permissions
 
@@ -33,8 +36,8 @@ const Navbar: React.FC<NavbarProps> = ({ permissions }) => {
   return (
 
     <div className="bg-lime-500 p-4 w-full">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="text-white text-2xl font-bold">Your Logo</div>
+      <div className="container mx-auto flex justify-between items-center ">
+        <Link href="/"className=""><Image className= "w-32"src={Logo} alt= "Logo"/></Link>
     
         <div className='flex flex-row space-x-8'>
           {permissions.includes("navAppointments") ? (
@@ -61,7 +64,7 @@ const Navbar: React.FC<NavbarProps> = ({ permissions }) => {
             <div className="modal-content p-4 bg-white rounded shadow-md">
               <p className="mb-4">¿Está seguro que quieres cerrar sesión?</p>
               <button onClick={confirmSignOut} className="bg-red-500 text-white font-bold py-2 px-4 rounded mr-2">
-                Yes
+                Si
               </button>
               <button onClick={cancelSignOut} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
                 No
