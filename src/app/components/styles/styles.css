@@ -548,7 +548,7 @@ video {
   width: max-content;
   border-radius: 9999px;
   --tw-bg-opacity: 1;
-  background-color: hsl(12 88% 59% / var(--tw-bg-opacity));
+  background-color: lime;
   padding-top: 1rem;
   padding-bottom: 1rem;
   padding-left: 3rem;
@@ -805,7 +805,7 @@ video {
 
 .bg-bright-red {
   --tw-bg-opacity: 1;
-  background-color: hsl(12 88% 59% / var(--tw-bg-opacity));
+  background-color: lime;
 }
 
 .bg-vary-light-gray {
@@ -980,7 +980,7 @@ video {
 }
 
 .shadow-bright-red\/30 {
-  --tw-shadow-color: hsl(12 88% 59% / 0.3);
+  --tw-shadow-color: green;
   --tw-shadow: var(--tw-shadow-colored);
 }
 

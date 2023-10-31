@@ -19,10 +19,12 @@ const signInHandler = NextAuth({
                 const username = credentials?.username as string;
                 const password = credentials?.password as string;
 
+                //Making the request to the server
                 const loginBody = {email, username, password};
                 const {data, error} = await loginHandler(loginBody);
                 if(error) throw error.response.data.message;
-                console.log(data);
+
+                //information i need in the session
                 const user= {
                     id: data.session.clinicId,
                     username: data.session.username,
@@ -33,6 +35,7 @@ const signInHandler = NextAuth({
             }
         })
     ],
+    //Setting up callbacks configuration
     callbacks: {
         jwt({account, token, user, profile, session}){
             if(user)

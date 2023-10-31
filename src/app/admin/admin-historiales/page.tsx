@@ -4,8 +4,9 @@ import Navbar from '../../components/navbarAdmin';
 import LandingPage from "../../components/landingPage";
 import LoadingPage from "../../components/loadingPage";
 function AdminHistorialesPage(){
+  //Obteniendo información de la sesión
   const {data: session, status} = useSession();
-  // const us: object= session?.user?; 
+  
   return (status === "authenticated" && session?.user?.permissions?.includes("adminHistorials"))?
     //Admin home Page
     (<main>

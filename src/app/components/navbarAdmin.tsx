@@ -6,7 +6,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import Logo from './images/logo.png';
 
-type Permission = string; // You can define a more specific type for permissions
+type Permission = string; //
 
 type NavbarProps = {
   permissions?: Permission[];
@@ -21,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({ permissions }) => {
   };
 
   const confirmSignOut = () => {
-    // Add your sign-out logic here
+    // signout Login
     signOut();
 
     // Close the confirmation dialog
@@ -38,7 +38,8 @@ const Navbar: React.FC<NavbarProps> = ({ permissions }) => {
     <div className="bg-lime-500 p-4 w-full">
       <div className="container mx-auto flex justify-between items-center ">
         <Link href="/"className=""><Image className= "w-32"src={Logo} alt= "Logo"/></Link>
-    
+
+        {/* renderizado condicional del menú de páginas */}   
         <div className='flex flex-row space-x-8'>
           {permissions.includes("navAppointments") ? (
             <NavbarLink page={"Navegar Citas"} url={"/admin/navegar-citas"} />
@@ -57,7 +58,10 @@ const Navbar: React.FC<NavbarProps> = ({ permissions }) => {
           ) : null}
         </div>
 
+        {/*Botón para cerrar sesión*/}
         <button onClick = {handleSignOut}className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-full">Cerrar sesión</button>
+
+        {/*Modal para confirmar el cerrado de la sesión*/}
         {showConfirmation && (
         <div className="fixed top-0 left-0 w-full h-full flex items-right justify-center z-50">
           <div className="modal w-96 text-xl">

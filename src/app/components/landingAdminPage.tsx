@@ -1,13 +1,16 @@
 import { getClinicInfoHandler } from '../handlers/clinic';
 import {use} from "react"
 
+//sessionProps type
 interface sessionProps {
   clinicId: string;
   username: string;
   permissions?: string;
 }
 
+//Mechanism for making http request
 const fetchMap = new Map<string, Promise<any>>();
+
 function queryClient(name:string, query:() => Promise<any>) {
   if(!fetchMap.has(name)) {
     fetchMap.set(name, query());
@@ -15,11 +18,14 @@ function queryClient(name:string, query:() => Promise<any>) {
   return fetchMap.get(name)!;
 }
 
+//ClinicInfo component
 const ClinicInfo: React.FC<sessionProps> = ({ clinicId, username }) => {
 
+  //making server request
   const res = use(
     queryClient("clinicInfo", () => getClinicInfoHandler(clinicId))
   );
+  
   const clinicInfo = res.data.clinic;
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-20">

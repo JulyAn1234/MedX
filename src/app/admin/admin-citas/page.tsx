@@ -3,9 +3,12 @@ import {useSession} from "next-auth/react";
 import Navbar from '../../components/navbarAdmin';
 import LandingPage from "../../components/landingPage";
 import LoadingPage from "../../components/loadingPage";
+
 function AdminCitasPage(){
+
+  //obteniendo información de la sesión
   const {data: session, status} = useSession();
-  // const us: object= session?.user?; 
+
   return (status === "authenticated" && session?.user?.permissions?.includes("adminAppointments"))?  
     //Admin home Page
     (<main>

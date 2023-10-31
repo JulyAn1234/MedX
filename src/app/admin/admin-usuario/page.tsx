@@ -7,14 +7,18 @@ import AdminUsuarios from "../../components/admin/admin-usuario";
 import LandingAdminPage from "../../components/landingAdminPage";
 
 function AdminUsuariosPage(){
+  //Obteniendo información de la sesión
   const {data: session, status} = useSession();
   const username = session?.user?.username;
   const id = session?.user?.id;
   const permissions = session?.user?.permissions;
+
+  //formando información de la clinica
   const clinicData = {
     clinicId: id || '',
     username: username || ''
   };
+
   return (status === "authenticated" && session?.user?.permissions?.includes("adminUsers"))?
     //Admin home Page
     (<main>

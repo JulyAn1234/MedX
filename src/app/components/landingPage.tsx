@@ -1,12 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from 'next/link'; 
 import Quiropractico from './images/Quiropractico.jpg';
-import './styles/styles.css'; // Import your stylesheet
+import './styles/styles.css'; // Import styles
 import Logo from './images/logo.png';
 
 const landingPage: React.FC= ({}) => {
   const loginPath = "/api/auth/signin";
+  //Page content
   return ( 
     <div>
       <header>
@@ -76,11 +77,8 @@ const landingPage: React.FC= ({}) => {
             <p className="text-dark-grayish-blue text-center [grid-area:copy] md:text-right">Copyright MedX 2023. Todos los derechos reservados</p>
         </section>
       </footer>
-
     </div>
-
-
     );
 };
-// src\app\components\images
+
 export default landingPage;

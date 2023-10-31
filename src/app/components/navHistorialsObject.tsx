@@ -7,6 +7,7 @@ type NavbarProps = {
 };
 
 const Navbar: React.FC<NavbarProps> = ({ permissions }) => {
+  
   const handleSignOut = () => {
     // Implement your sign-out logic here, e.g., redirect, clear sessions, or API call.
     alert('Signing out...'); // Placeholder for demonstration purposes.
