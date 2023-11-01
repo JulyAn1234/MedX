@@ -11,7 +11,6 @@ export async function loginHandler(loginBody:object): Promise<{ data: any; error
         if(!backEndpoint) 
             throw new Error("BACKEND_ENDPOINT is not defined");
         const apiUrl = `${backEndpoint}/login`;
-        console.log(apiUrl);
         const response: AxiosResponse = await axios.post(apiUrl, loginBody);
         
         return { data: response.data, error: null };
@@ -32,3 +31,40 @@ export const getClinicUsers = async (id: string) => {
         return { data: null, error };
     }
   };
+
+export const updateUser = async (id: string, user: string, body:object) => {
+    try {
+        if(!backEndpoint)
+            throw new Error ("BACKEND_ENDPOINT is not defined");
+        const apiUrl = `${backEndpoint}/edit-user/${id}/${user}`;
+        const response: AxiosResponse = await axios.put(apiUrl, body);
+
+        return { data: response.data, error: null };
+    } catch (error) {
+        return { data: null, error };
+    }
+}
+
+export const deleteUser = async (id: string, user: string) => {
+    try {
+        if(!backEndpoint)
+            throw new Error ("BACKEND_ENDPOINT is not defined");
+        const apiUrl = `${backEndpoint}/delete-user/${id}/${user}`;
+        const response: AxiosResponse = await axios.delete(apiUrl);
+        return { data: response.data, error: null };
+    } catch (error) {
+        return { data: null, error };
+    }
+}
+
+export const createUser = async (id: string, body:object) => {
+    try {
+        if(!backEndpoint)
+           throw new Error ("BACKEND_ENDPOINT is not defined");
+        const apiUrl = `${backEndpoint}/create-user/${id}`;
+        const response: AxiosResponse = await axios.post(apiUrl, body);
+        return { data: response.data, error: null };
+    } catch (error) {
+        return { data: null, error };
+    }
+}
