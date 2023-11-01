@@ -20,12 +20,13 @@ const Navbar: React.FC<NavbarProps> = ({ permissions }) => {
     setShowConfirmation(true);
   };
 
-  const confirmSignOut = () => {
+  const confirmSignOut = async() => {
     // signout Login
-    signOut();
+    await signOut();
 
     // Close the confirmation dialog
     setShowConfirmation(false);
+    window.location.href = "/";
   };
 
   const cancelSignOut = () => {

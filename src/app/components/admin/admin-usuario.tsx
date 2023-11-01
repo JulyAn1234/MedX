@@ -8,14 +8,20 @@ import FormModal from '../modals/formModal';
 import NotificationModal from '../modals/notificationModal';
 import ConfirmationModal from '../modals/confirmationModal';
 import {ErrorNotification, SuccessNotification, LoadingNotification} from '../modals/errorNotification';
+import CreateUserForm from '../forms/createUserForm';
 import { useState, useEffect } from 'react';
+import { get } from "http";
+import { create } from "domain";
+import { set } from "mongoose";
 
+//Permissions names on the database
 const ADMIN_USERS_KEYWORD = "adminUsers"
 const ADMIN_CITAS_KEYWORD = "adminAppointments"
 const ADMIN_HISTORIALES_KEYWORD = "adminHistorials"
 const NAV_HISTORIALES_KEYWORD = "navHistorials"
 const NAV_CITAS_KEYWORD = "navAppointments"
-
+//Array with all the permissions names, useful for mapping actions
+const permissionsKeyWords = [ADMIN_USERS_KEYWORD, ADMIN_CITAS_KEYWORD, ADMIN_HISTORIALES_KEYWORD, NAV_HISTORIALES_KEYWORD, NAV_CITAS_KEYWORD];
 
 //Type definition for the props that the component receives
 interface sessionProps {
@@ -196,13 +202,61 @@ const adminUsuarios: React.FC<sessionProps> = ({ clinicId, username }) => {
 
     //Create user Modal
     const [showCreateUserModal, setShowCreateUserModal] = useState(false);
-    const [showCreateUserNotificationModal, setShowCreateUserNotificationModal] = useState(false);
+    // const [showCreateUserNotificationModal, setShowCreateUserNotificationModal] = useState(false);
     const [createUserModalState, setCreateUserModalState] = useState("Initial");
-    const [userToCreate, setUserToCreate] = useState("");
-
+    const [createUserErrorMessage, setCreateUserErrorMessage] = useState("");
     //Auxiliar functions for CreateUserModal
-    async function createUserModalAcceptAction() {}
+    async function createUserModalAcceptAction() {
+        try {
+            setCreateUserModalState("Loading");
+            const userObject:any = await createUserObjectFromForm();
+            if (userObject["username"] === "" || userObject["password"] === "") {
+                setCreateUserErrorMessage("Error, los campos de usuario y contraseña son obligatorios."); 
+                throw new Error("Error, los campos de usuario y contraseña son obligatorios.");
+            }
+            const res = await createUser(clinicId, userObject);
+            if(res.error){
+                setCreateUserErrorMessage(res.error.response.data.message);
+                throw new Error(res.error.response.data.message);
+            }
+            setCreateUserModalState("Success");
+            await new Promise((resolve) => setTimeout(resolve, 200));
+            window.location.reload();
+        } catch (error) {
+            setCreateUserModalState("Error");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setCreateUserModalState("Initial");
+        }
 
+    }
+    async function createUserObjectFromForm(){
+        const userObject = {
+            "username": "",
+            "password": "",
+            "permissions": [] as string[]
+        };
+        const usernameFormElement = document.getElementById("createUserForm_username") as HTMLInputElement;
+        const passwordFormElement = document.getElementById("createUserForm_password") as HTMLInputElement;
+        userObject["username"] = usernameFormElement.value;
+        userObject["password"] = passwordFormElement.value;
+        permissionsKeyWords.forEach((permission)=> {
+            const permissionFormElement = document.getElementById(`createUserForm_${permission}`) as HTMLInputElement;
+            if(permissionFormElement.checked)
+                userObject["permissions"].push(permission);
+        });
+        return userObject;
+    }
+    function createUserClearAction() {
+        const usernameFormElement = document.getElementById("createUserForm_username") as HTMLInputElement;
+        const passwordFormElement = document.getElementById("createUserForm_password") as HTMLInputElement;
+        usernameFormElement.value = "";
+        passwordFormElement.value = "";
+        permissionsKeyWords.forEach((permission)=> {
+            const permissionFormElement = document.getElementById(`createUserForm_${permission}`) as HTMLInputElement;
+            permissionFormElement.checked = false;
+        });
+        return;
+    }
   return (
     <div className="overflow-x-auto">
         <div className="min-w-screen min-h-screen bg-gray-100 flex justify-center bg-gray-100 font-sans overflow-hidden">
@@ -213,7 +267,12 @@ const adminUsuarios: React.FC<sessionProps> = ({ clinicId, username }) => {
                             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                                 <th className="py-3 px-6 text-left">Nombre de usuario</th>
                                 <th className="py-3 px-6 text-left">Permisos</th>
-                                <th className="py-3 px-6 text-center"></th>
+                                <th className="py-3 px-6 text-center">
+                                    {/*create user button*/}
+                                    <button className="bg-blue-300 hover:bg-blue-500 text-white-800 font-bold py-2 px-4 rounded inline-flex items-center" onClick={() => setShowCreateUserModal(true)}>
+                                        <span>Agregar usuario</span>
+                                    </button>
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="text-gray-600 text-sm font-light">
@@ -351,6 +410,36 @@ const adminUsuarios: React.FC<sessionProps> = ({ clinicId, username }) => {
             :(<p>Notificación</p>)
             }
         </NotificationModal>
+
+        {/*CreateUserModal*/}
+        <FormModal
+            modalTitle={"Crear usuario"}
+            isOpen={showCreateUserModal}
+            onAccept={() => {createUserModalAcceptAction()}}
+            onClose={() => {setShowCreateUserModal(false)}}
+            onClear={()=> {createUserClearAction()}}
+            key={"createUserModal"}
+        >
+            <CreateUserForm {...{}}/>
+            {createUserModalState === "Success"? (<SuccessNotification {...{message: "Usuario creado exitosamente"}}/>)
+            :createUserModalState === "Loading"? (<LoadingNotification {...{message: "Cargando..."}}/>)
+            :createUserModalState === "Error"? (<ErrorNotification {...{message: `${createUserErrorMessage}`}}/>)
+            :(<></>)}
+
+        </FormModal>
+        
+        {/* CreateUserNotificationModal */}
+        {/* <NotificationModal
+            modalTitle={"Notificación"}
+            isOpen={showCreateUserNotificationModal}
+            buttonsActive={false}
+            onAccept={() => {setShowCreateUserNotificationModal(false)}}
+            onClose={() => {setShowCreateUserNotificationModal(false)}}
+            key={"createUserNotificationModal"}
+        >
+        }
+        </NotificationModal> */}
+
     </div>
   );
 };

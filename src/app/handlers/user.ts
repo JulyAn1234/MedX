@@ -64,7 +64,7 @@ export const createUser = async (id: string, body:object) => {
         const apiUrl = `${backEndpoint}/create-user/${id}`;
         const response: AxiosResponse = await axios.post(apiUrl, body);
         return { data: response.data, error: null };
-    } catch (error) {
+    } catch (error:any) {
         return { data: null, error };
     }
 }
