@@ -6,12 +6,13 @@ interface MedicalHistoryProps {
     CURP: string;
     date_of_birth: string;
     sex: string;
+    onClickEvent: () => void;
 }
 
-const navExpedient: React.FC<MedicalHistoryProps> = ({ names, last_names,CURP, date_of_birth, sex }) => {
+const navExpedient: React.FC<MedicalHistoryProps> = ({ names, last_names,CURP, date_of_birth, sex, onClickEvent }) => {
     date_of_birth = date_of_birth.split('T')[0];
     return (
-        <Link href= {`/admin/navegar-historiales/${CURP}`}className="bg-white shadow-md rounded px-8 pt-6 pb-8 mx-80 mb-4 flex flex-col my-2">
+        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mx-80 mb-4 flex flex-col my-2">
                 {/* <h2 className="text-2xl font-bold mb-2">Historial Médico</h2> */}
             <div className="flex justify-center space-x-32 " >
                 <div className="flex flex-col ">
@@ -30,8 +31,14 @@ const navExpedient: React.FC<MedicalHistoryProps> = ({ names, last_names,CURP, d
                     <p className="text-gray-700 font-bold">Sexo:</p>
                     <p className="text-gray-700">{sex}</p>
                 </div>
+                <div className=''>
+                    <button className='bg-gray-300 w-12 h-12 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center' onClick={onClickEvent}>
+                        <img src="/watch.png" alt="" />
+                    </button>
+
+                </div>
             </div>
-        </Link>
+        </div>
     );
 };
 

@@ -2,6 +2,8 @@ import React, {use, useState} from "react";
 import { getClinicExpedients, getExpedientByCURP } from "@/app/handlers/expedient";
 import NavExpedient from "../entityComponents/navExpedient";
 import SearchBar from "../searchBar";
+import NotificationModal from '../modals/notificationModal';
+import Expedient from "../entityComponents/expedient";
 import { set } from "mongoose";
 //Type definition for the props that the component receives
 interface sessionProps {
@@ -25,9 +27,16 @@ const navegarHistoriales: React.FC<sessionProps> = ({ clinicId }) => {
         queryClient("userInfo", () => getClinicExpedients(clinicId))
     );
     
+    const [showExpedentModal, setShowExpedientModal] = useState(false);
+    const [expedientToShow, setExpedientToShow] = useState(res.data?.expedients[0]);
     const [expedientArray, setExpedientArray] = useState<object []>(res.data?.expedients);
     const [searching, setSearching] = useState("none");
-    console.log(expedientArray);
+    
+    const openExpedientModal = async (CURP:string) =>{
+        const expedient = await getExpedientByCURP(clinicId, CURP);
+        setExpedientToShow(expedient.data?.expedient);
+        setShowExpedientModal(true); 
+    }
 
     async function searchExpedient(searchText:string){
         setSearching("loading");
@@ -48,13 +57,20 @@ const navegarHistoriales: React.FC<sessionProps> = ({ clinicId }) => {
             </div>
             {searching ==="none"?
             (
-                <>
+                <div className="flex flex-col">
                     {expedientArray.map((expedient:any) => (
                         <>
-                        <NavExpedient {...expedient}></NavExpedient>
+                            {/* <NavExpedient {...expedient}></NavExpedient> */}
+                            <NavExpedient
+                                names={expedient.names}
+                                last_names={expedient.last_names}
+                                CURP={expedient.CURP}
+                                date_of_birth={expedient.date_of_birth}
+                                sex= {expedient.sex}
+                                onClickEvent= {() => {openExpedientModal(expedient.CURP)}}></NavExpedient>
                         </>
                     ),)}
-                </> 
+                </div > 
             ): searching ==="loading"?
             (
                 <div className="max-w-md mx-auto py-8">
@@ -70,6 +86,18 @@ const navegarHistoriales: React.FC<sessionProps> = ({ clinicId }) => {
                 </div>
             )
         }
+
+            {/* ExpedientModal */}
+            <NotificationModal
+                modalTitle={"Historial médico"}
+                isOpen={showExpedentModal}
+                buttonsActive={false}
+                onAccept={() => {setShowExpedientModal(false)}}
+                onClose={() => {setShowExpedientModal(false)}}
+                key={"ExpedientModal"}
+            >
+                <Expedient expedient = {expedientToShow}></Expedient>
+            </NotificationModal>
 
         </div>
     )

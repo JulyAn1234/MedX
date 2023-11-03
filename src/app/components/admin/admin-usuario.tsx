@@ -9,10 +9,8 @@ import NotificationModal from '../modals/notificationModal';
 import ConfirmationModal from '../modals/confirmationModal';
 import {ErrorNotification, SuccessNotification, LoadingNotification} from '../modals/errorNotification';
 import CreateUserForm from '../forms/createUserForm';
+import EditUserForm from '../forms/editUserForm';
 import { useState, useEffect } from 'react';
-import { get } from "http";
-import { create } from "domain";
-import { set } from "mongoose";
 
 //Permissions names on the database
 const ADMIN_USERS_KEYWORD = "adminUsers"
@@ -193,13 +191,40 @@ const adminUsuarios: React.FC<sessionProps> = ({ clinicId, username }) => {
     
     //Edit user Modal
     const [showEditUserModal, setShowEditUserModal] = useState(false);
-    const [showEditUserNotificationModal, setShowEditUserNotificationModal] = useState(false);
     const [editUserModalState, setEditUserModalState] = useState("Initial");
     const [userToEdit, setUserToEdit] = useState("");
+    const [editUserErrorMessage, setEditUserErrorMessage] = useState("");
 
     //Auxiliar functions for EditUserModal
-    async function editUserModalAcceptAction() {}
+    async function editUserModalAcceptAction() {
+        try {
+            setEditUserModalState("Loading");
+            const passwordFormElement = document.getElementById("editUserForm_password") as HTMLInputElement;
+            const password = passwordFormElement.value;
+            if (password === "") {
+                setEditUserErrorMessage("Error, el campo de contraseña es obligatorio."); 
+                throw new Error("Error, el campo de contraseña es obligatorio.");
+            }
+            const res = await updateUser(clinicId, userToEdit, {password: password});
+            if(res.error){
+                setEditUserErrorMessage("Error, no se pudo modificar el usuario.");
+                throw new Error("No se pudo modificar el usuario.");
+            }
+            setEditUserModalState("Success");
+            await new Promise((resolve) => setTimeout(resolve, 200));
+            window.location.reload();
+        } catch (error) {
+            setEditUserModalState("Error");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setEditUserModalState("Initial");
+        }
+    }
 
+    function editUserClearAction(){
+        const passwordFormElement = document.getElementById("editUserForm_password") as HTMLInputElement;
+        passwordFormElement.value = "";
+        return;
+    }
     //Create user Modal
     const [showCreateUserModal, setShowCreateUserModal] = useState(false);
     // const [showCreateUserNotificationModal, setShowCreateUserNotificationModal] = useState(false);
@@ -428,17 +453,23 @@ const adminUsuarios: React.FC<sessionProps> = ({ clinicId, username }) => {
 
         </FormModal>
         
-        {/* CreateUserNotificationModal */}
-        {/* <NotificationModal
-            modalTitle={"Notificación"}
-            isOpen={showCreateUserNotificationModal}
-            buttonsActive={false}
-            onAccept={() => {setShowCreateUserNotificationModal(false)}}
-            onClose={() => {setShowCreateUserNotificationModal(false)}}
-            key={"createUserNotificationModal"}
+        {/*EditUserModal*/}
+        <FormModal
+            modalTitle={`Editar usuario ${userToEdit}`}
+            isOpen={showEditUserModal}
+            onAccept={() => {editUserModalAcceptAction()}}
+            onClose={() => {setShowEditUserModal(false)}}
+            onClear={()=> {editUserClearAction()}}
+            key={"editUserModal"}
         >
-        }
-        </NotificationModal> */}
+            <EditUserForm {...{username: userToEdit}}/>
+            {editUserModalState === "Success"? (<SuccessNotification {...{message: "Usuario modificado exitosamente"}}/>)
+            :editUserModalState === "Loading"? (<LoadingNotification {...{message: "Cargando..."}}/>)
+            :editUserModalState === "Error"? (<ErrorNotification {...{message: `${editUserErrorMessage}`}}/>)
+            :(<></>)}
+
+        </FormModal>
+
 
     </div>
   );
