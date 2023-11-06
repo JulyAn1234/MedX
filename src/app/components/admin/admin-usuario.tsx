@@ -282,6 +282,7 @@ const adminUsuarios: React.FC<sessionProps> = ({ clinicId, username }) => {
         });
         return;
     }
+
   return (
     <div className="overflow-x-auto">
         <div className="min-w-screen min-h-screen bg-gray-100 flex justify-center bg-gray-100 font-sans overflow-hidden">

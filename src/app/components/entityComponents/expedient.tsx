@@ -213,7 +213,7 @@ const expedient: React.FC<MedicalHistoryProps> = ({ expedient}) => {
                             <td className='px-4'>
                                 <div className='flex'>
                                     <p className='font-bold'>Pasatiempos:</p>
-                                    <p className='pl-2'>{expedient.hobbies? "Si":"No"}</p>
+                                    <p className='pl-2'>{expedient.hobbies}</p>
                                 </div>
                             </td>
                         </tr>

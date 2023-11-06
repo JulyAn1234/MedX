@@ -4,10 +4,14 @@ import NavExpedient from "../entityComponents/navExpedient";
 import SearchBar from "../searchBar";
 import NotificationModal from '../modals/notificationModal';
 import Expedient from "../entityComponents/expedient";
-import { set } from "mongoose";
+
 //Type definition for the props that the component receives
 interface sessionProps {
     clinicId: string;
+    isAdminPageMainProp?: boolean;
+    onDeleteMainProp?: (CURP:string) => void;
+    onEditMainProp?: (CURP:string) => void;
+    onCreateMainProp?: () => void;
   }
 
 //Mechanism for making http request
@@ -20,7 +24,7 @@ function queryClient(name:string, query:() => Promise<any>) {
   return fetchMap.get(name)!;
 }
 
-const navegarHistoriales: React.FC<sessionProps> = ({ clinicId }) => {
+const navegarHistoriales: React.FC<sessionProps> = ({ clinicId, isAdminPageMainProp, onDeleteMainProp, onEditMainProp, onCreateMainProp }) => {
     
     // making server request
     const res = use(
@@ -57,20 +61,50 @@ const navegarHistoriales: React.FC<sessionProps> = ({ clinicId }) => {
             </div>
             {searching ==="none"?
             (
-                <div className="flex flex-col">
-                    {expedientArray.map((expedient:any) => (
-                        <>
-                            {/* <NavExpedient {...expedient}></NavExpedient> */}
-                            <NavExpedient
-                                names={expedient.names}
-                                last_names={expedient.last_names}
-                                CURP={expedient.CURP}
-                                date_of_birth={expedient.date_of_birth}
-                                sex= {expedient.sex}
-                                onClickEvent= {() => {openExpedientModal(expedient.CURP)}}></NavExpedient>
-                        </>
-                    ),)}
-                </div > 
+                
+            <div className="min-w-screen min-h-screen bg-gray-100 flex justify-center bg-gray-100 font-sans overflow-hidden">
+                <div className=" lg:w-5/6">
+                    <div className="bg-white shadow-md rounded my-6">
+                        <table className="min-w-max w-full table-auto">
+                            <thead>
+                                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                    <th className="py-3 px-6 text-left">Nombre completo:</th>
+                                    <th className="py-3 px-6 text-left">CURP:</th>
+                                    <th className="py-3 px-6 text-left">Fecha de nacimiento:</th>
+                                    <th className="py-3 px-6 text-left">Sexo:</th>
+                                    <th className="py-3 px-6 text-left">
+                                        {isAdminPageMainProp?(
+                                            <button className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                                                onClick={onCreateMainProp}>
+                                                Crear nuevo expediente
+                                            </button>
+                                        ):(
+                                            <></>
+                                        )}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-gray-600 text-sm font-light">
+                                {expedientArray.map((expedient:any) => (
+                                <>
+                                    {/* <NavExpedient {...expedient}></NavExpedient> */}
+                                    <NavExpedient
+                                        names={expedient.names}
+                                        last_names={expedient.last_names}
+                                        CURP={expedient.CURP}
+                                        date_of_birth={expedient.date_of_birth}
+                                        sex= {expedient.sex}
+                                        onClickEvent= {() => {openExpedientModal(expedient.CURP)}}
+                                        isAdminPage= {isAdminPageMainProp? true:false}
+                                        onDelete= {() =>{onDeleteMainProp? onDeleteMainProp(expedient.CURP):console.log("no hay onDelete")}}
+                                        onEdit= { () =>{onEditMainProp? onEditMainProp(expedient.CURP):console.log("no hay onDelete")}}></NavExpedient>
+                                </>
+                            ),)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div > 
             ): searching ==="loading"?
             (
                 <div className="max-w-md mx-auto py-8">

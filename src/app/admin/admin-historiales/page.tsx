@@ -3,15 +3,22 @@ import {useSession} from "next-auth/react";
 import Navbar from '../../components/navbarAdmin';
 import LandingPage from "../../components/landingPage";
 import LoadingPage from "../../components/loadingPage";
+import AdminHistoriales from "../../components/admin/admin-historiales";
+
 function AdminHistorialesPage(){
   //Obteniendo información de la sesión
   const {data: session, status} = useSession();
-  
+  const id = session?.user?.id;
+  //formando información de la clinica
+  const clinicData = {
+    clinicId: id || ''
+  };
+
   return (status === "authenticated" && session?.user?.permissions?.includes("adminHistorials"))?
     //Admin home Page
     (<main>
       <Navbar permissions={session?.user?.permissions||[]} />
-      <h1>admin historiales</h1>
+      <AdminHistoriales {...clinicData}/>
     </main>) 
     : status ==="loading" ? 
     //Loading page
