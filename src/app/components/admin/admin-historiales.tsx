@@ -328,7 +328,7 @@ const adminHistoriales: React.FC<sessionProps> = ({ clinicId}) => {
             onClose: () => {setShowDeleteExpedientModal(false)},
             key: "deleteExpedientModal"
             }}>
-                <p>Esto eliminará toda la información del paciente con la CURP ${ExpedientToDelete}</p>
+                <p>Esto eliminará toda la información del paciente con la CURP {ExpedientToDelete}</p>
         </ConfirmationModal>
 
         {/* DeleteExpedientNotificationModal */}

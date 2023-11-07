@@ -74,9 +74,9 @@ const navegarHistoriales: React.FC<sessionProps> = ({ clinicId, isAdminPageMainP
                                     <th className="py-3 px-6 text-left">Sexo:</th>
                                     <th className="py-3 px-6 text-left">
                                         {isAdminPageMainProp?(
-                                            <button className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                                            <button className="w-28 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
                                                 onClick={onCreateMainProp}>
-                                                Crear nuevo expediente
+                                                Nuevo expediente
                                             </button>
                                         ):(
                                             <></>

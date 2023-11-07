@@ -2,9 +2,10 @@ import React, {use, useState} from "react";
 import { getExpedientByCURP } from "@/app/handlers/expedient";
 import { getClinicAppointments, getAppointmentById } from "@/app/handlers/appointment";
 import AppointmentRow from "../entityComponents/appointmentRow";
-import SearchBar from "../searchBar";
 import NotificationModal from '../modals/notificationModal';
-
+import Appointment from "../entityComponents/appointment";
+import { get } from "http";
+import exp from "constants";
 
 //Type definition for the props that the component receives
 interface sessionProps {
@@ -35,34 +36,18 @@ const NavegarCitas: React.FC<sessionProps> = ({ clinicId, isAdminPageMainProp, o
     const [showAppointmentModal, setShowAppointmentModal] = useState(false);
     const [AppointmentToShow, setAppointmentToShow] = useState(res.data?.appointments[0]);
     const [appointmentArray, setAppointmentArray] = useState<object []>(res.data?.appointments);
-    const [searching, setSearching] = useState("none");
-    
+    const [expedientToShow, setExpedientToShow] = useState();
+
     const openAppointmentsModal = async (appointmentId:string) =>{
         const appointment = await getAppointmentById(clinicId, appointmentId);
-        setAppointmentToShow(appointment.data?.expedient);
-        setShowAppointmentModal(true); 
-    }
-
-    async function searchAppointment(searchText:string){
-        setSearching("loading");
-        const res = await getExpedientByCURP(clinicId, searchText);
-        if(res.data?.expedient)
-        {
-            setAppointmentArray([res.data?.expedient]);
-            setSearching("none");
-        }
-        else
-            setSearching("notFound");
+        setAppointmentToShow(appointment.data?.appointment);
+        const expedient = await getExpedientByCURP(clinicId, appointment.data?.appointment.CURP);
+        setExpedientToShow(expedient.data?.expedient);
+        setShowAppointmentModal(true);
     }
 
     return(
-        <div className="w-full">
-            <div className="py-4">
-                <SearchBar onSearch={searchExpedient}></SearchBar>            
-            </div>
-            {searching ==="none"?
-            (
-                
+        <div className="w-full">                
             <div className="min-w-screen min-h-screen bg-gray-100 flex justify-center bg-gray-100 font-sans overflow-hidden">
                 <div className=" lg:w-5/6">
                     <div className="bg-white shadow-md rounded my-6">
@@ -75,7 +60,7 @@ const NavegarCitas: React.FC<sessionProps> = ({ clinicId, isAdminPageMainProp, o
                                     <th className="py-3 px-6 text-left">Hora de finalización:</th>
                                     <th className="py-3 px-6 text-left">
                                         {isAdminPageMainProp?(
-                                            <button className="w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+                                            <button className="w-24 h-12 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
                                                 onClick={onCreateMainProp}>
                                                 Nueva cita
                                             </button>
@@ -94,10 +79,10 @@ const NavegarCitas: React.FC<sessionProps> = ({ clinicId, isAdminPageMainProp, o
                                         date = {appointment.date}
                                         startHour =  {appointment.startHour}
                                         endHour = {appointment.endHour}
-                                        onClickEvent= {() => {openAppointmentsModal(appointment.CURP)}}
+                                        onClickEvent= {() => {openAppointmentsModal(appointment._id)}}
                                         isAdminPage= {isAdminPageMainProp? true:false}
-                                        onDelete= {() =>{onDeleteMainProp? onDeleteMainProp(appointment.CURP):console.log("no hay onDelete")}}
-                                        onEdit= { () =>{onEditMainProp? onEditMainProp(appointment.CURP):console.log("no hay onDelete")}}></AppointmentRow>
+                                        onDelete= {() =>{onDeleteMainProp? onDeleteMainProp(appointment._id):console.log("no hay onDelete")}}
+                                        onEdit= { () =>{onEditMainProp? onEditMainProp(appointment._id):console.log("no hay onDelete")}}></AppointmentRow>
                                 </>
                             ),)}
                             </tbody>
@@ -105,21 +90,6 @@ const NavegarCitas: React.FC<sessionProps> = ({ clinicId, isAdminPageMainProp, o
                     </div>
                 </div>
             </div > 
-            ): searching ==="loading"?
-            (
-                <div className="max-w-md mx-auto py-8">
-                    <img className= 'w-20 mx-auto' src="/loading.gif" alt="" />
-                    <p className="text-center py-4">Cargando...</p>
-                </div>
-            )
-            :
-            (
-                <div className="max-w-md mx-auto py-8">
-                    <img className= 'w-20 mx-auto'src="/notFound.png" alt="" />
-                    <p className="text-center py-4">No hay un expediente con esa CURP</p>
-                </div>
-            )
-        }
 
             {/* ExpedientModal */}
             <NotificationModal
@@ -130,7 +100,7 @@ const NavegarCitas: React.FC<sessionProps> = ({ clinicId, isAdminPageMainProp, o
                 onClose={() => {setShowAppointmentModal(false)}}
                 key={"AppointmentModal"}
             >
-                {/* <Expedient expedient = {expedientToShow}></Expedient> */}
+                <Appointment appointment = {AppointmentToShow} expedientToShow = {expedientToShow}></Appointment>               
             </NotificationModal>
 
         </div>

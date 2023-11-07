@@ -3,17 +3,22 @@ import {useSession} from "next-auth/react";
 import Navbar from '../../components/navbarAdmin';
 import LandingPage from "../../components/landingPage";
 import LoadingPage from "../../components/loadingPage";
-
+import AdminCitas from "../../components/admin/admin-citas";
 function AdminCitasPage(){
 
-  //obteniendo información de la sesión
+  //Obteniendo información de la sesión
   const {data: session, status} = useSession();
+  const id = session?.user?.id;
+  //formando información de la clinica
+  const clinicData = {
+    clinicId: id || ''
+  };
 
   return (status === "authenticated" && session?.user?.permissions?.includes("adminAppointments"))?  
     //Admin home Page
     (<main>
       <Navbar permissions={session?.user?.permissions||[]} />
-      <h1>admin citas</h1>
+      <AdminCitas  {...clinicData}></AdminCitas>
     </main>) 
     : status ==="loading" ? 
     //Loading page

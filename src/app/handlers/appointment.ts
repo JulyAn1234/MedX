@@ -30,11 +30,11 @@ export async function getAppointmentById(clinicId: string, appointmentId:string)
     }
   }
 
-export async function deleteExpedient(clinicId: string, CURP:string): Promise<{ data: any; error: any }> {
+export async function deleteAppointment(clinicId: string, CURP:string): Promise<{ data: any; error: any }> {
     try {
         if(!backEndpoint) 
             throw new Error("BACKEND_ENDPOINT is not defined");
-        const apiUrl = `${backEndpoint}/delete-expedient/${clinicId}/${CURP}`;
+        const apiUrl = `${backEndpoint}/delete-appointment/${clinicId}/${CURP}`;
         const response: AxiosResponse = await axios.delete(apiUrl);
         return { data: response.data, error: null };
     } catch (error) {
@@ -42,11 +42,11 @@ export async function deleteExpedient(clinicId: string, CURP:string): Promise<{ 
     }
   }
 
-export async function createExpedient(clinicId: string, data:any): Promise<{ data: any; error: any }> {
+export async function createAppointment(clinicId: string, data:any): Promise<{ data: any; error: any }> {
     try {
         if(!backEndpoint) 
             throw new Error("BACKEND_ENDPOINT is not defined");
-        const apiUrl = `${backEndpoint}/create-expedient/${clinicId}`;
+        const apiUrl = `${backEndpoint}/create-appointment/${clinicId}`;
         const response: AxiosResponse = await axios.post(apiUrl, data);
         return { data: response.data, error: null };
     } catch (error) {
@@ -54,11 +54,11 @@ export async function createExpedient(clinicId: string, data:any): Promise<{ dat
     }
   }
 
-export async function updateExpedient(clinicId: string, CURP:string, data:any): Promise<{ data: any; error: any }> {
+export async function updateAppointment(clinicId: string, CURP:string, data:any): Promise<{ data: any; error: any }> {
     try {
         if(!backEndpoint) 
             throw new Error("BACKEND_ENDPOINT is not defined");
-        const apiUrl = `${backEndpoint}/update-expedient/${clinicId}/${CURP}`;
+        const apiUrl = `${backEndpoint}/update-appointment/${clinicId}/${CURP}`;
         const response: AxiosResponse = await axios.put(apiUrl, data);
         return { data: response.data, error: null };
     } catch (error) {
