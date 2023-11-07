@@ -2,30 +2,29 @@ import React from 'react';
 interface MedicalHistoryProps {
     names: string;
     last_names: string;
-    CURP: string;
-    date_of_birth: string;
-    sex: string;
+    date: string;
+    startHour: string;
+    endHour: string;
     onClickEvent: () => void;
     isAdminPage?: boolean;
     onDelete?: () => void;
     onEdit?: () => void;
 }
 
-const navExpedient: React.FC<MedicalHistoryProps> = ({ names, last_names,CURP, date_of_birth, sex, onClickEvent,onDelete, onEdit, isAdminPage}) => {
-    date_of_birth = date_of_birth.split('T')[0];
+const AppointmentRow: React.FC<MedicalHistoryProps> = ({ names, last_names,date, endHour, startHour, onClickEvent,onDelete, onEdit, isAdminPage}) => {
     return (
         <tr className="border-b border-gray-200">
             <td className="py-2 px-4 text-left whitespace-nowrap">
                 <p className="text-gray-700">{`${names} ${last_names}`}</p>
             </td>
             <td className="py-2 px-4 text-left whitespace-nowrap">
-                <p className="text-gray-700">{CURP}</p>
+                <p className="text-gray-700">{date}</p>
             </td>
             <td className="py-2 px-4 text-left whitespace-nowrap">
-                <p className="text-gray-700">{date_of_birth}</p>
+                <p className="text-gray-700">{startHour}</p>
             </td>
             <td className="py-2 px-4 text-left whitespace-nowrap">
-                <p className="text-gray-700">{sex}</p>
+                <p className="text-gray-700">{endHour}</p>
             </td>
             <td className="py-2 px-4 text-left whitespace-nowrap">
                 <div className="flex space-x-4 items-center justify-center">
@@ -52,4 +51,4 @@ const navExpedient: React.FC<MedicalHistoryProps> = ({ names, last_names,CURP, d
     );
 };
 
-export default navExpedient;
+export default AppointmentRow;
