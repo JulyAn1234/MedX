@@ -128,7 +128,7 @@ export const CreateAppointmentForm: React.FC = () => {
             <div className='flex space-x-4 p-4'>
                 <div className='flex space-x-2'>
                     <p className='text-left font-bold'>Fecha:</p>
-                    <input id= "input_date" className="pl-2" type="date" min="1900-01-01" max={new Date().toISOString().slice(0, 10)}/>
+                    <input id= "input_date" className="pl-2" type="date" min={new Date().toISOString().slice(0, 10)} max= "2100-12-30"/>
                 </div>
                 <div className='flex space-x-2'>
                     <p className='text-left font-bold'>Hora de inicio:</p>
