@@ -70,6 +70,7 @@ const landingPage: React.FC= ({}) => {
         </section>
       </main>
       <footer className="bg-very-dark-blue py-6">
+      <p className="mx-16 text-dark-grayish-blue text-center [grid-area:copy] md:text-right">Suscribete a nuestro servicio enviandonos mensaje al correo medxarckore@gmail.com</p>
         <section className="wrapper grid gap-12 justify-items-center footer-area md:footer-area-md md:grid-cols-3 md:justify-items-stretch">
             <a href="#" className="[grid-area:logo]">
                 <Image src={Logo} alt= "Quiropractico" className="w-32"/>
